@@ -13,7 +13,7 @@ jobs:
   terraform:
     name: Apply main.tf
     runs-on: ubuntu-latest
-    environment: Production
+    environment: production
 
     # Optional: Setze standard-Env für "saubere" CLI-Ausgaben
     env:
@@ -33,8 +33,6 @@ jobs:
       - name: Terraform Version
         run: terraform version
 
-      # Falls deine main.tf im Repo-Root liegt, reicht working-directory: .
-      # Wenn sie in einem Unterordner liegt, passe 'working-directory' entsprechend an.
       - name: Terraform Init
         working-directory: .
         run: terraform init -input=false
