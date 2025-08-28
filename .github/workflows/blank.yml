@@ -36,18 +36,18 @@ jobs:
       # Falls deine main.tf im Repo-Root liegt, reicht working-directory: .
       # Wenn sie in einem Unterordner liegt, passe 'working-directory' entsprechend an.
       - name: Terraform Init
-        working-directory: ../../
+        working-directory: .
         run: terraform init -input=false
 
       - name: Terraform Validate
-        working-directory: ../../
+        working-directory: .
         run: terraform validate
 
       - name: Terraform Plan
-        working-directory: ../../
+        working-directory: .
         run: terraform plan -input=false -out=tfplan
 
       - name: Terraform Apply
-        working-directory: ../../
+        working-directory: .
         # auto-approve für non-interaktives Apply im CI
         run: terraform apply -input=false -auto-approve tfplan
