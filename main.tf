@@ -14,4 +14,10 @@ provider "azurerm" {
 resource "azurerm_resource_group" "dummy" {
   name     = "rg-terraform-dummy"
   location = "westeurope"
+  tags = {
+    Kostenstelle   = "your-value"
+    Ablaufdatum    = "your-value"
+    verantwortlich = "your-value"
+    Umgebung       = "your-value"
+  }
 }
