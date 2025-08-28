@@ -1,0 +1,53 @@
+name: CI
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+  id-token: write
+  
+jobs:
+  terraform:
+    name: Apply main.tf
+    runs-on: ubuntu-latest
+    environment: Production
+
+    # Optional: Setze standard-Env für "saubere" CLI-Ausgaben
+    env:
+      TF_IN_AUTOMATION: "true"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          # Optional: feste Version setzen (z.B. 1.9.5). Wenn weggelassen, wird die Standardversion verwendet.
+          # terraform_version: 1.9.5
+          cli_config_credentials_token: "" # keine Terraform Cloud nötig
+
+      - name: Terraform Version
+        run: terraform version
+
+      # Falls deine main.tf im Repo-Root liegt, reicht working-directory: .
+      # Wenn sie in einem Unterordner liegt, passe 'working-directory' entsprechend an.
+      - name: Terraform Init
+        working-directory: .
+        run: terraform init -input=false
+
+      - name: Terraform Validate
+        working-directory: .
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: .
+        run: terraform plan -input=false -out=tfplan
+
+      - name: Terraform Apply
+        working-directory: .
+        # auto-approve für non-interaktives Apply im CI
+        run: terraform apply -input=false -auto-approve tfplan
